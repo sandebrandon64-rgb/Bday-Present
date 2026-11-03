@@ -7,13 +7,24 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  :root {
+    --pink:      #ff6fa5;
+    --pink-soft: #ffb6d5;
+    --pink-bg:   #ffe9f3;
+    --blue:      #4f8cff;
+    --blue-soft: #a9c7ff;
+    --blue-bg:   #e6f0ff;
+    --ink:       #1a1a2e;
+    --ink-soft:  #3d3d5c;
+  }
+
   body {
     font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(135deg, #ffd6e8 0%, #ffe9f3 40%, #e6d9ff 100%);
+    background: linear-gradient(135deg, #ffe9f3 0%, #e6f0ff 45%, #c9d9ff 75%, #f4d9e8 100%);
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    color: #5a3d52;
+    color: var(--ink);
   }
 
   /* Floating hearts background */
@@ -47,7 +58,7 @@
   }
   .hero h1 {
     font-size: clamp(2rem, 6vw, 3.5rem);
-    background: linear-gradient(90deg, #ff6fa5, #b37bff, #ff6fa5);
+    background: linear-gradient(90deg, var(--pink), var(--blue), var(--pink));
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -60,7 +71,7 @@
   }
   .hero p {
     font-size: 1.15rem;
-    color: #8a5a78;
+    color: var(--ink-soft);
     max-width: 500px;
     margin: 0 auto 30px;
     line-height: 1.6;
@@ -78,7 +89,7 @@
   /* Buttons */
   .btn {
     display: inline-block;
-    background: linear-gradient(135deg, #ff8fc0, #c79bff);
+    background: linear-gradient(135deg, var(--pink), var(--blue));
     color: white;
     border: none;
     padding: 14px 32px;
@@ -86,13 +97,13 @@
     font-size: 1.05rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(255, 111, 165, 0.4);
+    box-shadow: 0 6px 18px rgba(79, 140, 255, 0.35);
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: inherit;
   }
   .btn:hover {
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 10px 24px rgba(255, 111, 165, 0.55);
+    box-shadow: 0 10px 24px rgba(255, 111, 165, 0.5);
   }
   .btn:active { transform: scale(0.97); }
 
@@ -103,10 +114,11 @@
   .section-title {
     text-align: center;
     font-size: 1.7rem;
-    color: #a35a8a;
+    color: var(--pink);
     margin-bottom: 24px;
+    text-shadow: 0 1px 0 #fff;
   }
-  .section-title span { font-size: 1.4rem; }
+  .section-title span { font-size: 1.4rem; color: var(--blue); }
 
   /* Cards grid */
   .grid {
@@ -114,6 +126,104 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 18px;
   }
+
+  /* ---------- PHOTO GALLERY ---------- */
+  .photo-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 26px;
+    padding: 10px 0;
+  }
+  .polaroid {
+    background: #ffffff;
+    padding: 12px 12px 44px;
+    border-radius: 6px;
+    box-shadow: 0 12px 28px rgba(26, 26, 46, 0.18);
+    width: 200px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  .polaroid.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .polaroid:nth-child(1) { transform: rotate(-4deg) translateY(30px) scale(0.95); }
+  .polaroid:nth-child(2) { transform: rotate(3deg)  translateY(30px) scale(0.95); }
+  .polaroid:nth-child(3) { transform: rotate(-2deg) translateY(30px) scale(0.95); }
+  .polaroid:nth-child(4) { transform: rotate(4deg)  translateY(30px) scale(0.95); }
+
+  .polaroid:nth-child(1).visible { transform: rotate(-4deg) translateY(0) scale(1); }
+  .polaroid:nth-child(2).visible { transform: rotate(3deg)  translateY(0) scale(1); }
+  .polaroid:nth-child(3).visible { transform: rotate(-2deg) translateY(0) scale(1); }
+  .polaroid:nth-child(4).visible { transform: rotate(4deg)  translateY(0) scale(1); }
+
+  .polaroid:hover {
+    transform: rotate(0deg) translateY(-8px) scale(1.05) !important;
+    box-shadow: 0 18px 40px rgba(255, 111, 165, 0.4);
+    z-index: 3;
+  }
+  .polaroid img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 3px;
+    display: block;
+    background: linear-gradient(135deg, var(--pink-soft), var(--blue-soft));
+  }
+  .polaroid .caption {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Segoe Script', 'Comic Sans MS', cursive;
+    font-size: 0.95rem;
+    color: var(--pink);
+  }
+  .polaroid::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 60px;
+    height: 20px;
+    background: rgba(255, 182, 213, 0.7);
+    border-radius: 2px;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 46, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+  }
+  .lightbox.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 12px;
+    border: 6px solid #fff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+  .lightbox.open img { transform: scale(1); }
 
   /* Scratch / reveal cards */
   .card {
@@ -143,37 +253,38 @@
     justify-content: center;
     padding: 18px;
     text-align: center;
-    box-shadow: 0 8px 20px rgba(180, 120, 160, 0.25);
+    box-shadow: 0 8px 20px rgba(26, 26, 46, 0.15);
   }
   .card-front {
-    background: linear-gradient(135deg, #ffb6d5, #d9b6ff);
-    color: white;
+    background: linear-gradient(135deg, var(--pink-soft), var(--blue-soft));
+    color: var(--ink);
     font-size: 2.2rem;
     flex-direction: column;
     gap: 8px;
   }
   .card-front small {
     font-size: 0.8rem;
-    opacity: 0.9;
+    opacity: 0.85;
     font-weight: normal;
+    color: var(--ink-soft);
   }
   .card-back {
     background: #fffafd;
-    color: #7a4b68;
+    color: var(--ink-soft);
     transform: rotateY(180deg);
     font-size: 1rem;
     line-height: 1.5;
-    border: 2px dashed #ffb6d5;
+    border: 2px dashed var(--pink-soft);
   }
 
   /* Compliment button section */
   .compliment-box {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.75);
     border-radius: 30px;
     padding: 36px 24px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(200, 140, 180, 0.2);
-    border: 2px solid #ffd6e8;
+    box-shadow: 0 10px 30px rgba(79, 140, 255, 0.15);
+    border: 2px solid var(--pink-soft);
   }
   #complimentDisplay {
     font-size: 1.2rem;
@@ -182,7 +293,7 @@
     align-items: center;
     justify-content: center;
     margin: 20px 0;
-    color: #8a5a78;
+    color: var(--ink-soft);
     line-height: 1.5;
     font-style: italic;
   }
@@ -193,31 +304,40 @@
     border-radius: 18px;
     padding: 20px;
     text-align: center;
-    box-shadow: 0 8px 20px rgba(180, 120, 160, 0.2);
-    border-top: 5px solid #ffb6d5;
-    transition: transform 0.25s;
+    box-shadow: 0 8px 20px rgba(26, 26, 46, 0.12);
+    border-top: 5px solid var(--pink);
+    transition: transform 0.25s, box-shadow 0.25s;
   }
-  .award:hover { transform: translateY(-6px) rotate(-1deg); }
+  .award:hover {
+    transform: translateY(-6px) rotate(-1deg);
+    box-shadow: 0 14px 30px rgba(79, 140, 255, 0.25);
+  }
   .award .emoji { font-size: 2.4rem; display: block; margin-bottom: 8px; }
-  .award h3 { font-size: 1rem; color: #a35a8a; margin-bottom: 6px; }
-  .award p { font-size: 0.85rem; color: #9a7a8a; }
+  .award h3 { font-size: 1rem; color: var(--blue); margin-bottom: 6px; }
+  .award p { font-size: 0.85rem; color: var(--ink-soft); }
 
   /* Final message */
   .final {
     text-align: center;
-    background: linear-gradient(135deg, #fff0f6, #f3e8ff);
+    background: linear-gradient(135deg, #fff0f6, #eef4ff);
     border-radius: 30px;
     padding: 50px 26px;
-    border: 2px dashed #ffb6d5;
+    border: 2px dashed var(--pink-soft);
+    box-shadow: 0 10px 30px rgba(79, 140, 255, 0.12);
   }
   .final h2 {
     font-size: 1.9rem;
-    color: #ff6fa5;
+    color: var(--pink);
     margin-bottom: 16px;
+  }
+  .final h2 + h2 {
+    color: var(--blue);
+    font-size: 1.5rem;
+    margin-top: -6px;
   }
   .final p {
     font-size: 1.05rem;
-    color: #8a5a78;
+    color: var(--ink-soft);
     line-height: 1.7;
     max-width: 550px;
     margin: 0 auto 20px;
@@ -225,7 +345,7 @@
   .final .signature {
     font-family: 'Segoe Script', cursive;
     font-size: 1.4rem;
-    color: #b37bff;
+    color: var(--blue);
     margin-top: 20px;
   }
 
@@ -250,11 +370,12 @@
 
   footer {
     text-align: center;
-    color: #b58aa5;
+    color: var(--ink-soft);
     font-size: 0.85rem;
     padding: 20px;
     position: relative;
     z-index: 2;
+    opacity: 0.75;
   }
 </style>
 </head>
@@ -271,9 +392,32 @@
   <header class="hero">
     <div class="cake">🎂</div>
     <h1>Happy Birthday Maslin!</h1>
-    <p>A little corner of the internet made just for you 💕<br>Click around — it's all yours.</p>
+    <p>A little corner of the internet made just for you 💙<br>Click around — it's all yours.</p>
     <button class="btn" onclick="celebrate()">🎉 Pop the confetti!</button>
   </header>
+
+  <!-- PHOTO GALLERY -->
+  <section>
+    <h2 class="section-title">📸 Moments With You <span>(tap to view)</span></h2>
+    <div class="photo-gallery">
+      <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="img.jpg" alt="A memory with you">
+        <div class="caption">us 💙</div>
+      </div>
+      <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="img2.jpg" alt="Another memory">
+        <div class="caption">forever 💖</div>
+      </div>
+      <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="img3.jpg" alt="Another memory">
+        <div class="caption">appreciated🌸</div>
+      </div>
+      <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="img4.jpg" alt="Another memory">
+        <div class="caption">always ✨</div>
+      </div>
+    </div>
+  </section>
 
   <!-- REVEAL CARDS -->
   <section>
@@ -304,18 +448,23 @@
 
       <p>That's it — no tricks, no punchline. Just a tiny reminder that you're loved, you're hilarious, and the world is way better with you in it.</p>
       <p>Happy birthday, superstar. Can't wait to celebrate you. 💖</p>
-      <p>Mapresent haaa mari ikuneta but achauya hawo. On behalf of everyone who loves you! 💖</p>
+      <p>Mapresent haaa mari ikunetsa but achauya hawo. On behalf of everyone who loves you! 💖</p>
 
       <div class="signature">— with love, your friend</div>
     </div>
   </section>
 
-  <footer>made with 💕 just for you</footer>
+  <footer>made with 💙 & 💖 just for you from us</footer>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="Memory enlarged">
 </div>
 
 <script>
 /* ============ 1. FLOATING HEARTS ============ */
-const heartEmojis = ['💖','💕','💗','✨','🌸','💫','🩷','🎀'];
+const heartEmojis = ['💖','💙','💗','✨','🌸','💫','🩷','🎀','🦋'];
 function spawnHeart() {
   const h = document.createElement('div');
   h.className = 'heart-bg';
@@ -329,14 +478,38 @@ function spawnHeart() {
 }
 setInterval(spawnHeart, 700);
 
-/* ============ 2. REVEAL CARDS ============ */
+/* ============ 2. PHOTO GALLERY (fade in + lightbox) ============ */
+const polaroids = document.querySelectorAll('.polaroid');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 120);
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+polaroids.forEach(p => revealObserver.observe(p));
+
+function openLightbox(src) {
+  const lb = document.getElementById('lightbox');
+  document.getElementById('lightboxImg').src = src;
+  lb.classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+/* ============ 3. REVEAL CARDS ============ */
 const revealCards = [
-  { front: '😂', label: 'open when you need a laugh', back: 'Remember that time we laughed so hard we couldn\'t breathe? That\'s the energy I want for you today — and forever.' },
-  { front: '🥹', label: 'open when you\'re sad', back: 'Hey. It\'s okay. You are allowed to feel things. And you never have to do it alone — I\'m one text away, always.' },
-  { front: '🎵', label: 'open when you miss me', back: 'Put on our playlist, close your eyes, and pretend I\'m judging your dance moves next to you. (I am.)' },
-  { front: '🌙', label: 'open when you can\'t sleep', back: 'Count sheep. Or better — count the times I\'ve laughed at your jokes. You\'ll be out cold in seconds. 😌' },
+  { front: '😂', label: 'open when you need a laugh', back: 'Tarisa forehead yaAngela' },
+  { front: '🥹', label: 'open when you\'re sad', back: 'Go to Brian He will give you a hug' },
+  { front: '🎵', label: 'open when you miss me', back: 'Always mu 3 Grey.' },
+  { front: '🌙', label: 'Verenga F.R.S' },
   { front: '✨', label: 'open when you forget your worth', back: 'You are kind. You are funny. You are the person everyone\'s secretly happy to see. Don\'t forget it.' },
-  { front: '🎁', label: 'open just because', back: 'No reason. Just wanted to say: you\'re my favorite human and I hope today is as amazing as you are. 💖' }
+  { front: '🎁', label: 'open just because', back: 'No reason. Just wanted to say: You are an amazing human and I hope today is as amazing as you are. 💖' }
 ];
 
 const cardGrid = document.getElementById('cardGrid');
@@ -358,7 +531,7 @@ revealCards.forEach(card => {
   cardGrid.appendChild(el);
 });
 
-/* ============ 3. COMPLIMENTS ============ */
+/* ============ 4. COMPLIMENTS ============ */
 const compliments = [
   'You have the best laugh in any room. 💫',
   'Your energy is contagious — in the best way.',
@@ -388,7 +561,7 @@ function giveCompliment() {
   miniConfetti(display);
 }
 
-/* ============ 4. AWARDS ============ */
+/* ============ 5. AWARDS ============ */
 const awards = [
   { emoji: '🏅', title: 'Best Hugger', desc: 'Scientifically proven. Undefeated.(Cannot truly approve but ndakaudzwa)' },
   { emoji: '📱', title: 'Fastest Texter Back', desc: 'Even at 3am. A true legend.... Asi unondigrey ticker hako😂' },
@@ -406,7 +579,7 @@ awards.forEach(a => {
   awardGrid.appendChild(el);
 });
 
-/* ============ 5. CONFETTI ============ */
+/* ============ 6. CONFETTI ============ */
 const canvas = document.getElementById('confetti');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -419,7 +592,7 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-const colors = ['#ff8fc0','#c79bff','#ffd166','#8ce0ff','#ff6fa5','#b6ffb6'];
+const colors = ['#ff6fa5','#4f8cff','#ffb6d5','#a9c7ff','#1a1a2e','#ffd166','#8ce0ff'];
 
 function spawnParticles(x, y, count, spread) {
   for (let i = 0; i < count; i++) {
@@ -475,7 +648,7 @@ function miniConfetti(el) {
   spawnParticles(r.left + r.width / 2, r.top + r.height / 2, 25, 8);
 }
 
-/* ============ 6. WELCOME BURST ============ */
+/* ============ 7. WELCOME BURST ============ */
 window.addEventListener('load', () => {
   setTimeout(() => spawnParticles(window.innerWidth / 2, window.innerHeight * 0.25, 60, 10), 400);
 });
