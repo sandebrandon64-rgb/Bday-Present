@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Happy Birthday ✨</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(135deg, #ffd6e8 0%, #ffe9f3 40%, #e6d9ff 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    color: #5a3d52;
+  }
+
+  /* Floating hearts background */
+  .heart-bg {
+    position: fixed;
+    top: -50px;
+    font-size: 24px;
+    opacity: 0.6;
+    animation: fall linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-50px) rotate(0deg); opacity: 0.7; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Layout */
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px 80px;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    background: linear-gradient(90deg, #ff6fa5, #b37bff, #ff6fa5);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 3s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes shine {
+    to { background-position: 200% center; }
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: #8a5a78;
+    max-width: 500px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+  }
+  .hero .cake {
+    font-size: 5rem;
+    display: inline-block;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-18px); }
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff8fc0, #c79bff);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 40px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(255, 111, 165, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+  }
+  .btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 24px rgba(255, 111, 165, 0.55);
+  }
+  .btn:active { transform: scale(0.97); }
+
+  /* Sections */
+  section {
+    margin: 50px 0;
+  }
+  .section-title {
+    text-align: center;
+    font-size: 1.7rem;
+    color: #a35a8a;
+    margin-bottom: 24px;
+  }
+  .section-title span { font-size: 1.4rem; }
+
+  /* Cards grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+  }
+
+  /* Scratch / reveal cards */
+  .card {
+    perspective: 1000px;
+    height: 170px;
+    cursor: pointer;
+  }
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  .card.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(180, 120, 160, 0.25);
+  }
+  .card-front {
+    background: linear-gradient(135deg, #ffb6d5, #d9b6ff);
+    color: white;
+    font-size: 2.2rem;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card-front small {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    font-weight: normal;
+  }
+  .card-back {
+    background: #fffafd;
+    color: #7a4b68;
+    transform: rotateY(180deg);
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 2px dashed #ffb6d5;
+  }
+
+  /* Compliment button section */
+  .compliment-box {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 30px;
+    padding: 36px 24px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(200, 140, 180, 0.2);
+    border: 2px solid #ffd6e8;
+  }
+  #complimentDisplay {
+    font-size: 1.2rem;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    color: #8a5a78;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* Award cards */
+  .award {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(180, 120, 160, 0.2);
+    border-top: 5px solid #ffb6d5;
+    transition: transform 0.25s;
+  }
+  .award:hover { transform: translateY(-6px) rotate(-1deg); }
+  .award .emoji { font-size: 2.4rem; display: block; margin-bottom: 8px; }
+  .award h3 { font-size: 1rem; color: #a35a8a; margin-bottom: 6px; }
+  .award p { font-size: 0.85rem; color: #9a7a8a; }
+
+  /* Final message */
+  .final {
+    text-align: center;
+    background: linear-gradient(135deg, #fff0f6, #f3e8ff);
+    border-radius: 30px;
+    padding: 50px 26px;
+    border: 2px dashed #ffb6d5;
+  }
+  .final h2 {
+    font-size: 1.9rem;
+    color: #ff6fa5;
+    margin-bottom: 16px;
+  }
+  .final p {
+    font-size: 1.05rem;
+    color: #8a5a78;
+    line-height: 1.7;
+    max-width: 550px;
+    margin: 0 auto 20px;
+  }
+  .final .signature {
+    font-family: 'Segoe Script', cursive;
+    font-size: 1.4rem;
+    color: #b37bff;
+    margin-top: 20px;
+  }
+
+  /* Confetti canvas */
+  #confetti {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 99;
+  }
+
+  /* Pop animation */
+  .pop {
+    animation: pop 0.4s ease;
+  }
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+
+  footer {
+    text-align: center;
+    color: #b58aa5;
+    font-size: 0.85rem;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- Floating hearts -->
+<div id="heartLayer"></div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="cake">🎂</div>
+    <h1>Happy Birthday Maslin!</h1>
+    <p>A little corner of the internet made just for you 💕<br>Click around — it's all yours.</p>
+    <button class="btn" onclick="celebrate()">🎉 Pop the confetti!</button>
+  </header>
+
+  <!-- REVEAL CARDS -->
+  <section>
+    <h2 class="section-title">💌 Open When… <span>(tap a card)</span></h2>
+    <div class="grid" id="cardGrid"></div>
+  </section>
+
+  <!-- COMPLIMENT BUTTON -->
+  <section>
+    <div class="compliment-box">
+      <h2 class="section-title">💖 Press for a compliment</h2>
+      <div id="complimentDisplay">Press the button, bestie 👇</div>
+      <button class="btn" onclick="giveCompliment()">Give me one!</button>
+    </div>
+  </section>
+
+  <!-- AWARDS -->
+  <section>
+    <h2 class="section-title">🏆 Bestie Awards</h2>
+    <div class="grid" id="awardGrid"></div>
+  </section>
+
+  <!-- FINAL -->
+  <section>
+    <div class="final">
+      <h2>You made it to the end 🥹</h2>
+      <h2>Wakandiramba hako🤣🤣</h2>
+
+      <p>That's it — no tricks, no punchline. Just a tiny reminder that you're loved, you're hilarious, and the world is way better with you in it.</p>
+      <p>Happy birthday, superstar. Can't wait to celebrate you. 💖</p>
+      <p>Mapresent haaa mari ikuneta but achauya hawo. On behalf of everyone who loves you! 💖</p>
+
+      <div class="signature">— with love, your friend</div>
+    </div>
+  </section>
+
+  <footer>made with 💕 just for you</footer>
+</div>
+
+<script>
+/* ============ 1. FLOATING HEARTS ============ */
+const heartEmojis = ['💖','💕','💗','✨','🌸','💫','🩷','🎀'];
+function spawnHeart() {
+  const h = document.createElement('div');
+  h.className = 'heart-bg';
+  h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+  h.style.left = Math.random() * 100 + 'vw';
+  h.style.fontSize = (14 + Math.random() * 22) + 'px';
+  h.style.animationDuration = (6 + Math.random() * 6) + 's';
+  h.style.animationDelay = (Math.random() * 2) + 's';
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 14000);
+}
+setInterval(spawnHeart, 700);
+
+/* ============ 2. REVEAL CARDS ============ */
+const revealCards = [
+  { front: '😂', label: 'open when you need a laugh', back: 'Remember that time we laughed so hard we couldn\'t breathe? That\'s the energy I want for you today — and forever.' },
+  { front: '🥹', label: 'open when you\'re sad', back: 'Hey. It\'s okay. You are allowed to feel things. And you never have to do it alone — I\'m one text away, always.' },
+  { front: '🎵', label: 'open when you miss me', back: 'Put on our playlist, close your eyes, and pretend I\'m judging your dance moves next to you. (I am.)' },
+  { front: '🌙', label: 'open when you can\'t sleep', back: 'Count sheep. Or better — count the times I\'ve laughed at your jokes. You\'ll be out cold in seconds. 😌' },
+  { front: '✨', label: 'open when you forget your worth', back: 'You are kind. You are funny. You are the person everyone\'s secretly happy to see. Don\'t forget it.' },
+  { front: '🎁', label: 'open just because', back: 'No reason. Just wanted to say: you\'re my favorite human and I hope today is as amazing as you are. 💖' }
+];
+
+const cardGrid = document.getElementById('cardGrid');
+revealCards.forEach(card => {
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    <div class="card-inner">
+      <div class="card-front">
+        <span>${card.front}</span>
+        <small>${card.label}</small>
+      </div>
+      <div class="card-back">${card.back}</div>
+    </div>`;
+  el.addEventListener('click', () => {
+    el.classList.toggle('flipped');
+    miniConfetti(el);
+  });
+  cardGrid.appendChild(el);
+});
+
+/* ============ 3. COMPLIMENTS ============ */
+const compliments = [
+  'You have the best laugh in any room. 💫',
+  'Your energy is contagious — in the best way.',
+  'You are way funnier than you give yourself credit for.',
+  'Talking to you is my favorite part of the day.',
+  'You make ordinary moments feel special.',
+  'Your kindness is your superpower. 🦸‍♀️',
+  'The world is softer because you\'re in it. 🌸',
+  'You are the friend everyone wishes they had.',
+  'Your taste in music? Immaculate. 🎧',
+  'You deserve every good thing coming your way. 💖',
+  'You\'re the human equivalent of a warm hug.',
+  'Never stop being exactly who you are.'
+];
+
+const display = document.getElementById('complimentDisplay');
+let lastIndex = -1;
+function giveCompliment() {
+  let i;
+  do { i = Math.floor(Math.random() * compliments.length); }
+  while (i === lastIndex && compliments.length > 1);
+  lastIndex = i;
+  display.textContent = compliments[i];
+  display.classList.remove('pop');
+  void display.offsetWidth;
+  display.classList.add('pop');
+  miniConfetti(display);
+}
+
+/* ============ 4. AWARDS ============ */
+const awards = [
+  { emoji: '🏅', title: 'Best Hugger', desc: 'Scientifically proven. Undefeated.(Cannot truly approve but ndakaudzwa)' },
+  { emoji: '📱', title: 'Fastest Texter Back', desc: 'Even at 3am. A true legend.... Asi unondigrey ticker hako😂' },
+  { emoji: '🎬', title: 'Worst Movie Taste', desc: 'Affectionately. We still watch them.' },
+  { emoji: '🍕', title: 'Most Likely to Share Food', desc: 'Except the last bite. Never the last bite. Chero wakandinyima Pie' },
+  { emoji: '🌟', title: 'Main Character Energy', desc: 'The whole room knows it. Apo neApo' },
+  { emoji: '💐', title: 'Best Secret Keeper', desc: 'Vault-level security. Zero leaks.' }
+];
+
+const awardGrid = document.getElementById('awardGrid');
+awards.forEach(a => {
+  const el = document.createElement('div');
+  el.className = 'award';
+  el.innerHTML = `<span class="emoji">${a.emoji}</span><h3>${a.title}</h3><p>${a.desc}</p>`;
+  awardGrid.appendChild(el);
+});
+
+/* ============ 5. CONFETTI ============ */
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let rafId = null;
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+const colors = ['#ff8fc0','#c79bff','#ffd166','#8ce0ff','#ff6fa5','#b6ffb6'];
+
+function spawnParticles(x, y, count, spread) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * spread,
+      vy: (Math.random() - 1) * spread - 2,
+      size: 4 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 90 + Math.random() * 60,
+      rot: Math.random() * Math.PI,
+      vr: (Math.random() - 0.5) * 0.3
+    });
+  }
+  if (!rafId) loop();
+}
+
+function loop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.vy += 0.12;
+    p.vx *= 0.99;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.vr;
+    p.life--;
+    if (p.life <= 0 || p.y > canvas.height + 20) {
+      particles.splice(i, 1);
+      continue;
+    }
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+    ctx.restore();
+  }
+  if (particles.length) {
+    rafId = requestAnimationFrame(loop);
+  } else {
+    rafId = null;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function celebrate() {
+  spawnParticles(canvas.width / 2, canvas.height * 0.4, 180, 14);
+}
+
+function miniConfetti(el) {
+  const r = el.getBoundingClientRect();
+  spawnParticles(r.left + r.width / 2, r.top + r.height / 2, 25, 8);
+}
+
+/* ============ 6. WELCOME BURST ============ */
+window.addEventListener('load', () => {
+  setTimeout(() => spawnParticles(window.innerWidth / 2, window.innerHeight * 0.25, 60, 10), 400);
+});
+</script>
+</body>
+</html>
